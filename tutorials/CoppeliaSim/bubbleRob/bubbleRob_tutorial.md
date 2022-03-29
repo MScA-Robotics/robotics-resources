@@ -151,7 +151,7 @@ Next we are going to add a [graph object](https://www.coppeliarobotics.com/help
 1. Click [Menu bar > Add > Graph] to add a new graph, then rename it to _positionGraph_.
 2. Attach the graph to _bubbleRob_, and set the graph's absolute coordinates to (0,0,0.005).
 3. Click on the graph settings icon to the far right of the _graph_ object in the hierarchy (looks like three columns or vertical sliders).  Uncheck **show time plots**.  Check **Visible while Simulation not running** and **visible while simulation running**
-3. Add a [child script](https://www.coppeliarobotics.com/helpFiles/en/childScripts.htm) to the _bubbleRob_ object by right-clicking on _bubbleRob_ in the hierarchy and selecting [Add > Associated Child Script > non-threaded > Lua]
+3. Add a non-threaded [child script](https://www.coppeliarobotics.com/helpFiles/en/childScripts.htm) to the _bubbleRob_ object by right-clicking on _bubbleRob_ in the hierarchy and selecting [Add > Associated Child Script > non-threaded > Lua]
 4. Click on the script/paper icon that was added next to the _bubbleRob_ object in the hierarcy to open the script.
 5. Paste the following Lua callback code to get the current position of the _bubbleRob_ and graph it.
 
@@ -276,7 +276,7 @@ CoppeliaSim provides some basic computer vision image processing out of the box 
 
 We will use edge detection to only display the edges of the objects seen by the vision sensor.
 
-1. Add a child script to the vision sensor with the following Lua code:
+1. Add a non-threaded child script to the vision sensor with the following Lua code:
 
 ```Lua
 function sysCall_vision(inData)
@@ -473,14 +473,14 @@ The CoppeliaSim remote API needs certain files to function properly:
 Back in your original scene (not the copy you were playing around with), we want to disable the native Lua script that controls _bubbleRob_ and instead, tell CoppeliaSim to listen for remote API control.
 
 1. Disable the child script on _bubbleRob_ by clicking on the "Scripts" button on the left menu rail (looks like a piece of paper), selecting **Child Script "/bubbleRob"** and checking **Disabled** under **Script Properties**.
-2. Add a **threaded** Lua child script to any of the cylinders and start the RemoteAPI server on port 19999 by adding the following line to `coroutineMain()`:
+2. Add a **threaded** Lua child script to any of the cylinders and the following line to `coroutineMain()` to start the RemoteAPI server service on port 19999:
 ```lua
 simRemoteApi.start(19999)
 ```
 
-This remote server will only be up and running when the simulation is running in CoppeliaSim (play button is clicked).
+This temporary remote server service will only be up and running when the simulation is running in CoppeliaSim (play button is clicked).
 
-Read more about [Enabling the Remote API - Server Side](https://www.coppeliarobotics.com/helpFiles/en/remoteApiServerSide.htm) and how the [Remote API works](https://www.coppeliarobotics.com/helpFiles/en/remoteApiModusOperandi.htm).
+Read more about [Enabling the Remote API - Server Side](https://www.coppeliarobotics.com/helpFiles/en/remoteApiServerSide.htm) and how the [Remote API works](https://www.coppeliarobotics.com/helpFiles/en/remoteApiModusOperandi.htm).  For reference, the continuous API server (not tied to a child script) is on port 19997.
 
 ### Python Script to Control bubbleRob
 
@@ -588,4 +588,4 @@ Save your final CoppeliaSim scene file as `bubbleRob_lastName_firstName.ttt` wit
 
 ## Continue to Explore
 
-This is only a small example of what you can do with the Remote API.  Explore more and try to recreate more of the Lua functionality that we programmed natively in CoppeliaSim. Experiment with capturing the images from the _visionSensor_.  Also, try combining running a non-threaded Lua child script for just the graphs with the remote API control of the robot movement.  If you get stuck, reach out to the instructor or TA with questions.  If there are enough questions, we will cover more demos in later class sessions. 
+This is only a small example of what you can do with the Remote API.  Explore more and try to recreate more of the Lua functionality that we programmed natively in CoppeliaSim. Experiment with capturing the images from the _visionSensor_.  Also, try combining running a non-threaded Lua child script for just the graphs with the remote API control of the robot movement.  If you get stuck, reach out to the instructor or TA with questions.  If there are enough questions, we will cover more demos in later class sessions.
