@@ -566,9 +566,9 @@ while (t-start_time)<30: #run for 30 seconds
     # wait for a bit before sensing again
     time.sleep(0.2)
 
-    # read the proximity sensor
+    # read the proximity sensor.  Use the buffer mode for subsequent reads
     (err_code, detectionState,detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector
-     ) = sim.simxReadProximitySensor(clientID, proximity_sensor, sim.simx_opmode_streaming)
+     ) = sim.simxReadProximitySensor(clientID, proximity_sensor, sim.simx_opmode_buffer)
 
     # update the time
     t = time.time()
