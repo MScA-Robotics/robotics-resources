@@ -43,7 +43,7 @@ The first time you read from a sensor, use `simx_opmode_streaming` mode. For sub
 
 ```python
 # get the handle of the visionSensor
-err_code,vision_sensor = sim.simxGetObjectHandle(clientID,"visionSensor", sim.simx_opmode_blocking)
+err_code,vision_sensor = sim.simxGetObjectHandle(clientID,"/visionSensor", sim.simx_opmode_blocking)
 
 if err_code > 1:
     sys.exit(f'error accessing visionSensor: {err_code}')
@@ -51,7 +51,7 @@ if err_code > 1:
 # read the current state of the visionSensor
 # the numeric option is 0/1 for greyscale/color
 err_code,resolution,image = sim.simxGetVisionSensorImage(clientID,vision_sensor,0,sim.simx_opmode_streaming)
-if err_code >= 1:
+if err_code > 1:
     sys.exit(f'error reading visionSensor: {err_code}')
 ```
 
@@ -188,7 +188,7 @@ def main():
         sys.exit(f'error accessing proximitySensor: {err_code}')
 
     # get the handle of the visionSensor
-    err_code,vision_sensor = sim.simxGetObjectHandle(clientID,"visionSensor", sim.simx_opmode_blocking)
+    err_code,vision_sensor = sim.simxGetObjectHandle(clientID,"/visionSensor", sim.simx_opmode_blocking)
 
     if err_code > 1:
         sys.exit(f'error accessing visionSensor: {err_code}')
@@ -203,7 +203,7 @@ def main():
     # read the current state of the visionSensor
     # the numeric option is 0/1 for greyscale/color
     err_code,resolution,image = sim.simxGetVisionSensorImage(clientID,vision_sensor,0,sim.simx_opmode_streaming)
-    if err_code >= 1:
+    if err_code > 1:
         sys.exit(f'error reading visionSensor: {err_code}')
 
     speed = 2
@@ -218,11 +218,6 @@ def main():
     t = start_time
 
     while (sim.simxGetConnectionId(clientID) != -1): # run while ClientID open
-
-        # read the vision sensor
-        err_code,resolution,image = sim.simxGetVisionSensorImage(clientID, vision_sensor,0,sim.simx_opmode_buffer)
-        # Save the current image
-        process_save_image(image, resolution)
 
         # if obstacle detected
         if detectionState:
@@ -247,6 +242,10 @@ def main():
         # read the proximity sensor
         (err_code, detectionState,detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector
          ) = sim.simxReadProximitySensor(clientID, proximity_sensor, sim.simx_opmode_buffer)
+        # read the vision sensor
+        err_code,resolution,image = sim.simxGetVisionSensorImage(clientID, vision_sensor,0,sim.simx_opmode_buffer)
+        # Save the current image
+        process_save_image(image, resolution)
 
         # update the time
         t = time.time()
